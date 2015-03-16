@@ -1,0 +1,15 @@
+/*
+Theme Name:   KoBoToLo Grund
+Theme URI:    http://kobotolo.se/
+Description:  
+Author:       Karin H Olsson
+Author URI:   http://kobotolo.se
+Template:     genesis
+Version:      0.01
+License:      GNU General Public License v2 or later
+License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+Tags:         light, dark, two-columns, right-sidebar, responsive-layout, accessibility-ready
+Text Domain:  kobotolo
+*/
+
+body {background:blue;}
