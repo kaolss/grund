@@ -8,11 +8,115 @@ License URI:  http://www.gnu.org/licenses/gpl-2.0.html
 Tags:         light, dark, two-columns, right-sidebar, responsive-layout, accessibility-ready
 Text Domain:  kobotolo
 */
+@color-first : darkblue;  
+@color-first-hover : green;  
+@color-sec : lightblue;  
+@color-sec-hover : red; 
+ 
+.link-color {
+    color: @color-first;
+    font-weight:bold;
+    &:hover {  
+        color: @color-first-hover; 
+    }
+}
 
 body {
     background:red;
     @media only screen and (max-width: 336px) {	
         background:none;
+    }
+}
+
+a {
+    .link-color;
+}
+.related-posts {
+    a {
+      .link-color;
+  }
+    li {
+        float: left;
+        list-style-type: none;
+        margin: 0 1% 0 0;
+        text-align: center;
+        width :24%;
+  }
+    img {
+        background: none repeat scroll 0 0 @color-first;
+        border: 2px solid @color-sec;
+        display: block;
+        margin: 0 auto;
+        padding: 5px;
+    }
+}
+
+.masonry-page {
+    .site-inner .entry,
+    .grid-sizer{
+        width:32.5%;
+        @media only screen and (max-width: 800px) {
+          width:49.5%;}
+        @media only screen and (max-width: 336px) {
+          width:100%;
+        }
+    }
+    .entry {
+        @media only screen and (min-width: 336px) {
+            padding  : 0rem 4rem;
+        }
+        margin-bottom:1%;
+    }
+    h1 {
+        font-size:24px;}
+    img{
+	width: calc(~"100% + 8rem");
+        margin-left: -4rem;
+        margin-bottom: 0;
+        max-width: none !important;
+        @media only screen and (max-width: 336px) {
+            padding  : 2%;
+            margin :0;
+            width: 100%;//calc(~"100% + 8rem");
+        }
+    }
+    .gutter-width {
+        width:1%;
+    }
+}
+.landing-page {
+    background: none;
+    .wrap,
+    .site-inner{
+        width:100%;
+        max-width:100%;
+        padding-top:0;
+    }
+    .entry-title {
+        display:none;
+     }
+     .cta-buttons {
+        button {
+            width:100%;
+            margin:10px;
+            background:@color-first;
+            a {
+                color:white;
+            }
+        }
+    button:nth-child(2) {
+        background:@color-sec;
+    }}
+
+    .site-inner .entry {
+        @media only screen and (min-width: 800px) {
+        width:100%;
+        padding  : 4rem 4rem 0 4rem;    
+        }
+    }
+    img{
+        @media only screen and (min-width: 800px) {
+        }
     }
 }
 
@@ -26,7 +130,6 @@ body {
  Responsive Menu
 --------------------------------------------- */
 .resp_initial {
-    background-color: none;
     color: white;
 }
 
@@ -38,15 +141,14 @@ body {
     .resp_initial;
     cursor: pointer;
     display: none;
-}
-
-.responsive-menu-icon::before {
-    content: "\f333";
-    display: block;
-    font: normal 20px/1 'dashicons';
-    margin: 0 auto;
-    padding: 10px;
-    text-align: center;
+    &::before {
+        content: "\f333";
+        display: block;
+        font: normal 20px/1 'dashicons';
+        margin: 0 auto;
+        padding: 10px;
+        text-align: center;
+    }
 }
 
 @media only screen and (max-width: 800px) {
@@ -128,12 +230,11 @@ body {
     .genesis-nav-menu.responsive-menu .current-menu-item > a,
     .genesis-nav-menu.responsive-menu .sub-menu a, {
         .resp_initial;
-        background: none;
     }
 
     .genesis-nav-menu.responsive-menu .sub-menu a:hover,
     .genesis-nav-menu.responsive-menu a:hover,
     .genesis-nav-menu.responsive-menu li:hover {
-        .resp_initial;//nobackground;
+        .resp_initial;
     }	
 }
