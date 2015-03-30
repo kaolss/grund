@@ -7,21 +7,21 @@
  */
 
 include_once( get_template_directory() . '/lib/init.php' );
+get_template_part('/lib/category_template');
 define( 'CHILD_THEME_NAME', 'KoBoToLo' );
 define( 'CHILD_THEME_VERSION', '0.0.1' );
 
 add_action( 'wp_enqueue_scripts', 'theme_enqueue_styles' );
 function theme_enqueue_styles() {
     wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css' );
-//    wp_enqueue_style( 'print-style', get_stylesheet_directory_uri() . '/print.css' ,array(), '0.01', 'print');
     wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array('parent-style'));
     wp_enqueue_style( 'theme-style', CHILD_URL .  '/kobotolo.less' ,array('child-style'));
     wp_enqueue_script( 'responsive-menu', CHILD_URL .  '/js/responsive-menu.js' ,array('jquery'), '0.5');
-    wp_enqueue_style( 'dashicons' );
-    
+    wp_enqueue_style( 'dashicons' );    
 }
 
 add_theme_support( 'html5' );
+add_theme_support( 'custom-header' );
 add_theme_support( 'genesis-responsive-viewport' );
 add_theme_support( 'genesis-footer-widgets', 3 );
 add_theme_support( 'post-thumbnails');
@@ -41,15 +41,13 @@ add_theme_support( 'genesis-structural-wraps', array(
 /****************************************************************/
 add_action( 'init', 'add_image_sizes' );
 function add_image_sizes() {
-	add_image_size('top1', 220, 220, TRUE);
-	add_image_size('top1-dubbel', 460, 460, TRUE);
-	add_image_size('erbj', 460, 300, TRUE);
+	add_image_size('masonry_thumb', 360, 360, TRUE);
+	add_image_size('related_thumb', 180, 180, TRUE);
 }
 
 function filter_image_sizes( $sizes) {   
-    unset( $sizes['top1']);
-    unset( $sizes['top1-dubbel']);
-    unset( $sizes['erbj']);
+    unset( $sizes['masonry_thumb']);
+    unset( $sizes['related_thumb']);
     return $sizes;
 }
 add_filter('intermediate_image_sizes_advanced', 'filter_image_sizes');
@@ -67,7 +65,7 @@ function kobotolo_footer_creds_text() {
 /****************************************************************/
 add_filter( 'genesis_pre_load_favicon', 'kobotolo_custom_favicon' );
 function kobotolo_custom_favicon( ) {
-	return ''. trailingslashit( get_bloginfo('url') ) .'favicon.ico';
+    return ''. trailingslashit( get_bloginfo('url') ) .'favicon.ico';
 }
 
 /****************************************************************/
@@ -107,7 +105,6 @@ add_action(  'transition_post_status',  'post_published', 10, 3 );
 function post_published( $new_status, $old_status, $post ) {
     if (   $old_status !== 'publish' && $new_status == 'publish' ) {
 	delete_cache($post);
-        // A function to perform actions when a post status changes from publish to any non-public status.
     }
 }
 
@@ -123,11 +120,9 @@ function removeDirectory($path) {
 
 function delete_cache( $post_id ) {
     $domain = $_SERVER['HTTP_HOST'];
-    error_log($domain);
     $domain2 =get_home_url();
     
     $domain2=str_replace("http://","",$domain2);
-    error_log($domain2);
     $domain3="";
     if ($domain!==$domain2) :
         $domain3=str_replace($domain,"",$domain2);
@@ -136,10 +131,8 @@ function delete_cache( $post_id ) {
     
     
     $s = WP_CONTENT_DIR.'/cache/all/'.$domain3;
-    error_log($s);
     $post = get_post($post_id);
     $t=$s.$post->post_name.'/index.html';
-    
     
     if (file_exists ( $t )) :
 	unlink($t);
@@ -156,27 +149,22 @@ function delete_cache( $post_id ) {
 	else {
 	    $t=$s.'/category/'.$cat->slug;
 	    if (is_dir($t)) {
-		removeDirectory($t);
-		error_log('direktoryt finns under category = '.$cat->slug, 0);
-	    
+		removeDirectory($t);	    
 	    }
 
-	}
-	
-	    }
+	}	
+    }
     $post_tags = wp_get_post_tags( $post_id);
     if ($post_tags) :
 	foreach($post_tags as $c){
 	$t=$s.'wpkol/wp-content/cache/all/tag/'.$c->slug;
 	if (is_dir($t)) {
 	    removeDirectory($t);
-	    error_log('direktoryt finns tag = '.$c->slug, 0);
 	}
 	else {
 	    $t=$s.'/tag/'.$c->slug;
 	    if (is_dir($t)) {
 		removeDirectory($t);
-		error_log('direktoryt finns under category = '.$cat->slug, 0);	    
 	    }
 	}
     }
